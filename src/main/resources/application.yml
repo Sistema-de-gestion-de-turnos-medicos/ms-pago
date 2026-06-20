@@ -1,0 +1,49 @@
+server:
+  port: 8089
+
+spring:
+  application:
+    name: ms-pago
+  datasource:
+    url: jdbc:mariadb://${DB_HOST:localhost}:${DB_PORT:3306}/ms_pago_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=America/Santiago
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:123}
+    driver-class-name: org.mariadb.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MariaDBDialect
+
+jwt:
+  secret: ms-pago-turnos-medicos-jwt-secret-key-2024-seguro
+  expiration: 86400000
+
+logging:
+  level:
+    com.turnos.mspago: DEBUG
+    org.springframework.security: INFO
+
+feign:
+  client:
+    ms-pacientes:
+      url: ${MS_PACIENTES_URL:http://localhost:8080}
+    ms-turnos:
+      url: ${MS_TURNOS_URL:http://localhost:8082}
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /doc/swagger-ui.html
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka/}
+  instance:
+    prefer-ip-address: true
